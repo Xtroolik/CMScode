@@ -5,7 +5,13 @@
         $targetDirectory = "img/";
         $fileName = $_FILES['file']['name'];
         move_uploaded_file($_FILES['file']['tmp_name'], $targetDirectory.$fileName);
-        
+        $authorID = 1;
+        $image = "http://localhost/cms/img/".$fileName;
+
+        $db = new mysqli('localhost', 'root', '', 'breaddit');
+        $q = $db->prepare("INSERT INTO post (author, image, title) VALUES (?, ?, ?)");
+        $q->bind_param("iss", $authorID, $image, $postTitle);
+        $q->execute();
     }
 ?>
 
