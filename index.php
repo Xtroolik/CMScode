@@ -13,7 +13,8 @@
     <div id="mid">
         <?php
         $db = new mysqli('localhost', 'root', '', 'breaddit');
-        $q = $db->prepare("Select post.id, post.image, post.title, post.timestamp, user.email
+        $q = $db->prepare("Select post.id, post.image, post.title, 
+        post.timestamp, user.Login
         FROM `post`
         INNER JOIN user ON post.author = user.ID");
         $q->execute();
@@ -21,7 +22,7 @@
         while($row = $result->fetch_assoc()) {
             echo '<div class="post">';
             echo '<h2 class="posttitle">'.$row['title'].'</h2>';
-            echo '<h3 class="postauthor">'.$row['email'].'</h3>';
+            echo '<h3 class="postauthor">'.$row['Login'].'</h3>';
             echo '<img src="'.$row['image'].'" alt="obrazekposta" class=postimage>';
             echo '<p class=postdesc>Post Description </p>';
             echo '<div class="postfooter">
