@@ -3,10 +3,21 @@
         $postTitle = $_POST['postTitle'];
         $postDescription = $_POST['postDescription'];
         $targetDirectory = "img/";
-        $fileName = $_FILES['file']['name'];
-        move_uploaded_file($_FILES['file']['tmp_name'], $targetDirectory.$fileName);
+        //$fileName = $_FILES['file']['name'];
+        // sha256
+        $fileName = hash('sha256', $_FILES['file']['name'].microtime());
+        //move_uploaded_file($_FILES['file']['tmp_name'], $targetDirectory.$fileName);
+
+        $fileString = file_get_contents($_FILES['file']['tmp_name']);
+
+        $gdImage = imagecreatefromstring($fileString);
+
+        $finalUrl = "http://localhost/cms/img/".$fileName.".webp";
+        $internalUrl = "img/".$fileName.".webp";
+
+        imagewebp($gdImage, $internalUrl);
+
         $authorID = 1;
-        $image = "http://localhost/cms/img/".$fileName;
 
         $db = new mysqli('localhost', 'root', '', 'breaddit');
         $q = $db->prepare("INSERT INTO post (author, image, title) VALUES (?, ?, ?)");

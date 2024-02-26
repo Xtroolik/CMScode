@@ -16,7 +16,8 @@
         $q = $db->prepare("Select post.id, post.image, post.title, 
         post.timestamp, user.Login
         FROM `post`
-        INNER JOIN user ON post.author = user.ID");
+        INNER JOIN user ON post.author = user.ID
+        ORDER BY post.timestamp DESC");
         $q->execute();
         $result = $q->get_result();
         while($row = $result->fetch_assoc()) {
