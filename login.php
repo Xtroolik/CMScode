@@ -16,7 +16,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
     $result = $q->get_result();
 
     $userRow = $result->fetch_assoc();
-    var_dump($userRow);
+    // var_dump($userRow);
     if($userRow == null) {
        echo "Błędny login lub hasło <br>";
     } else {
@@ -37,7 +37,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register" && isset($_RE
     if($password == $passwordRepeat) {
         $q = $db->prepare("INSERT INTO user VALUES (NULL, ?, ?)");
         $passwordHash = password_hash($password, PASSWORD_ARGON2I);
-        $q->bind_param("ss", $email, $passwordHash);
+        $q->bind_param("ss", $login, $passwordHash);
         $result = $q->execute();
         if($result) {
             echo "Konto utworzone poprawnie";
@@ -54,7 +54,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register" && isset($_RE
 //mysqli_query($d, "SELECT * FROM user");
 
 ?>
-<form action="login.php" method="get">
+<form action="login.php" method="post">
     <label for="login">Login: </label> <br>
     <input type="email" name="login" id="login"><br>
     <label for="password">Hasło: </label> <br>
