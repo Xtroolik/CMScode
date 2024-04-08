@@ -1,52 +1,21 @@
 <?php
+session_start();
+require("./class/user.class.php");
+?>
+<?php
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
-    $login = $_REQUEST['login'];
-    $password = $_REQUEST['password'];
-
-    $login = filter_var($login, FILTER_SANITIZE_EMAIL);
-
-    $db = new mysqli("localhost", "root", "", "breaddit");
-    //$q = "SELECT * FROM user WHERE email = '$login'";
-    //echo $q;
-    // $db->query($q);
-
-    $q = $db->prepare("SELECT * FROM user WHERE Login = ? LIMIT 1");
-    $q-> bind_param("s", $login);
-    $q->execute();
-    $result = $q->get_result();
-
-    $userRow = $result->fetch_assoc();
-    // var_dump($userRow);
-    if($userRow == null) {
-       echo "Błędny login lub hasło <br>";
-    } else {
-           if(password_verify($password, $userRow["Password"])) {
-           echo "Zalogowano poprawnie <br>";
-       } else {
-           echo "Błędny login lub hasło <br>";
-    }
-}
+    $result = User::Login($_REQUEST['login'], $_REQUEST['password']);
+    if($result)
+        echo "Login Successful";
+    else
+        echo "Login Failed";
 }
 if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register" && isset($_REQUEST['login']) && isset($_REQUEST['password']) &&isset($_REQUEST['passwordRepeat'])) {
-    $db = new mysqli("localhost", "root", "", "breaddit");
-    $login = $_REQUEST['login'];
-    $login = filter_var($login, FILTER_SANITIZE_EMAIL); 
-
-    $password = $_REQUEST['password'];
-    $passwordRepeat = $_REQUEST['passwordRepeat'];
-    if($password == $passwordRepeat) {
-        $q = $db->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
-        $passwordHash = password_hash($password, PASSWORD_ARGON2I);
-        $q->bind_param("ss", $login, $passwordHash);
-        $result = $q->execute();
-        if($result) {
-            echo "Konto utworzone poprawnie";
-        } else {
-            echo "Coś poszło nie tak";
-        }
-    } else {
-        echo "Hasła sie nie zgadzają, spróbuj ponownie.";
-    }
+    $result = User::Register($_REQUEST['login'], $_REQUEST['password']);
+    if($result)
+        echo "Account Creation Successful";
+    else
+        echo "Account Creation Failed";
 }
 
 

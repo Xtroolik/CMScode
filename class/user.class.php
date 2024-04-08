@@ -12,9 +12,9 @@ class User {
 
     public static function Register(string $email, string $password) : bool {
         $db = new mysqli("localhost", "root", "", "breaddit");
-        $q = $db->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
+        $q = $db->prepare("INSERT INTO user (login, password) VALUES (?, ?)");
         $passwordHash = password_hash($password, PASSWORD_ARGON2I);
-        $q->bind_param("ss", $login, $passwordHash);
+        $q->bind_param("ss", $email, $passwordHash);
         $result = $q->execute();
         return $result;
     }
@@ -32,6 +32,7 @@ class User {
         if(password_verify($password, $passwordHash)) {
             $user = new User($id, $email);
             $_SESSION['user'] = $user;
+            return true;
         } else {
             return false;
         }
