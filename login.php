@@ -35,7 +35,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register" && isset($_RE
     $password = $_REQUEST['password'];
     $passwordRepeat = $_REQUEST['passwordRepeat'];
     if($password == $passwordRepeat) {
-        $q = $db->prepare("INSERT INTO user VALUES (NULL, ?, ?)");
+        $q = $db->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
         $passwordHash = password_hash($password, PASSWORD_ARGON2I);
         $q->bind_param("ss", $login, $passwordHash);
         $result = $q->execute();
