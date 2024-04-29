@@ -9,6 +9,9 @@ class User {
         $this->id = $id;
         $this->email = $email;
     }
+    public function getEmail() : string {
+        return $this->email;
+    }
 
     public static function Register(string $email, string $password) : bool {
         $db = new mysqli("localhost", "root", "", "breaddit");
@@ -37,10 +40,39 @@ class User {
             return false;
         }
     }
+    public static function isLogged() {
+        if(isset($_SESSION['user'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function LogOut() {
+        session_destroy();
+    }
+    public function changePassword(string $oldpassword, string $newpassword) : bool  {
+        $db = new mysqli("localhost", "root", "", "breaddit");
+        $sql = "SELECT password FROM user WHERE user.id = ?";
+        $q = $db->prepare($sql);
+        $q->bind_param("i", $this->id);
+        $q->execute();
+        $result = $q->get_result();
+        $row = $result->fetch_assoc();
+        $oldpasswordHash = $row['password'];
 
+        if(password_verify($oldpassword, $oldpasswordHash)){
+            $newpasswordHash = password_hash($newpassword, PASSWORD_ARGON2I);
+            $sql = "UPDATE user SET password = ? WHERE user.id = ?";
+            $q = $db->prepare($sql);
+            $q->bind_param("si", $newpasswordHash, $this->id);
+            $result = $q->execute();
+            return $result;
+        } else {
+            return false;
+        }
     }
 }
+
 
 
 ?>

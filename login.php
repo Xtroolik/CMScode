@@ -42,3 +42,9 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register" && isset($_RE
     <input type="hidden" name="action" value="register">
     <input type="submit" value="Zarejestruj">
 </form>
+<script>
+    function redirect() {
+        window.location.href = "http://localhost://cms/index.php"
+    }
+    setTimeout(redirect, 5000)
+</script>

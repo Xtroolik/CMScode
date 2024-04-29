@@ -1,3 +1,6 @@
+<?php
+require_once('class/user.class.php');
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -10,6 +13,25 @@
     <header>
         <h1>breaddit</h1>
     </header>
+
+    <div id="login">
+    <a>Nawigacja</a>
+            <?php if(User::isLogged()) : ?>
+                <!-- zalogowany -->
+                <a href="profile.php">
+                    <button>
+                        Profil
+                    </button>
+                </a>
+            <?php else: ?>
+                <!-- nie zalogowany -->
+                <a href="login.php">
+                    <button>
+                        Zaloguj się
+                    </button>
+                </a>
+                <?php endif; ?>  
+    </div>
     <div id="mid">
         <?php
         $db = new mysqli('localhost', 'root', '', 'breaddit');
@@ -35,7 +57,7 @@
             echo '</div>';
         }
         ?>
-
+    
 
         <!--<div class="post">
             <h3 class="posttitle">Title</h3>
