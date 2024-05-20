@@ -1,28 +1,9 @@
 <?php
-    if(!empty($_POST)) {
-        $postTitle = $_POST['postTitle'];
-        $postDescription = $_POST['postDescription'];
-        $targetDirectory = "img/";
-        //$fileName = $_FILES['file']['name'];
-        // sha256
-        $fileName = hash('sha256', $_FILES['file']['name'].microtime());
-        //move_uploaded_file($_FILES['file']['tmp_name'], $targetDirectory.$fileName);
-
-        $fileString = file_get_contents($_FILES['file']['tmp_name']);
-
-        $gdImage = imagecreatefromstring($fileString);
-
-        $finalUrl = "http://localhost/cms/img/".$fileName.".webp";
-        $internalUrl = "img/".$fileName.".webp";
-
-        imagewebp($gdImage, $internalUrl);
-
-        $authorID = 1;
-
-        $db = new mysqli('localhost', 'root', '', 'breaddit');
-        $q = $db->prepare("INSERT INTO post (author, image, title) VALUES (?, ?, ?)");
-        $q->bind_param("iss", $authorID, $image, $postTitle);
-        $q->execute();
+    require_once('class/post.class.php');
+    require_once('class/user.class.php');
+    session_start();
+    if(!empty($_POST) && isset($_SESSION['user'])) {
+        Post::CreatePost($_POST['postTitle'], $_POST['postDescription']);
     }
 ?>
 

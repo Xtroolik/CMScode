@@ -70,6 +70,10 @@ class User {
         } else {
             return false;
         }
+
+    }
+    public function getId() : int {
+        return $this->id;
     }
 }
 

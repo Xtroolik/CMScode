@@ -34,35 +34,13 @@ require_once('class/post.class.php');
                 <?php endif; ?>  
     </div>
     <div id="mid">
-        <?php
-        $db = new mysqli('localhost', 'root', '', 'breaddit');
-        $q = $db->prepare("Select post.id, post.image, post.title, 
-        post.timestamp, user.Login
-        FROM `post`
-        INNER JOIN user ON post.author = user.ID
-        ORDER BY post.timestamp DESC");
-        $q->execute();
-        $result = $q->get_result();
-        while($row = $result->fetch_assoc()) {
-            echo '<div class="post">';
-            echo '<h2 class="posttitle">'.$row['title'].'</h2>';
-            echo '<h3 class="postauthor">'.$row['Login'].'</h3>';
-            echo '<img src="'.$row['image'].'" alt="obrazekposta" class=postimage>';
-            echo '<p class=postdesc>Post Description </p>';
-            echo '<div class="postfooter">
-            <span class="postmeta">'.$row['timestamp'].'</span>
-            <span class="postscore">POINTS</span>
-                </div>';
-
-
-            echo '</div>';
-        }
+        <?php   
         $postList = Post::fetchPosts();
         foreach ($postList as $post) {
             echo '<div class="post">';
             echo '<h2 class="posttitle">'.$post->GetTitle().'</h2>';
             echo '<h3 class="postauthor">'.$post->GetAuthor().'</h3>';
-            echo '<img src="'.$post->GetImgUrl().'" alt="obrazekposta" class=postimage>';
+            echo '<img src="'.$post->GetImageUrl().'" alt="obrazekposta" class=postimage>';
             echo '<p class=postdesc>Post Description </p>';
             echo '<div class="postfooter">
             <span class="postmeta">'.$post->GetTimestamp().'</span>
