@@ -1,5 +1,6 @@
 <?php
 require_once('class/user.class.php');
+require_once('class/post.class.php');
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -56,7 +57,20 @@ require_once('class/user.class.php');
 
             echo '</div>';
         }
+        $postList = Post::fetchPosts();
+        foreach ($postList as $post) {
+            echo '<div class="post">';
+            echo '<h2 class="posttitle">'.$post->GetTitle().'</h2>';
+            echo '<h3 class="postauthor">'.$post->GetAuthor().'</h3>';
+            echo '<img src="'.$post->GetImgUrl().'" alt="obrazekposta" class=postimage>';
+            echo '<p class=postdesc>Post Description </p>';
+            echo '<div class="postfooter">
+            <span class="postmeta">'.$post->GetTimestamp().'</span>
+            <span class="postscore">POINTS</span>
+                </div>';
+        }
         ?>
+
     
 
         <!--<div class="post">
